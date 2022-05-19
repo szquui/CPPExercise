@@ -40,7 +40,7 @@ CustomString::~CustomString()
 {
 	if (customString)
 	{
-		delete customString;
+		delete [] customString;
 		customString = nullptr;
 	}
 }
@@ -54,7 +54,7 @@ CustomString& CustomString::operator=(const CustomString& customStr)
 
 	if (customString != nullptr)
 	{
-		delete customString;
+		delete[] customString;
 	}
 
 	int customStrLen = strlen(customStr.customString) + 1;
@@ -142,7 +142,7 @@ void CustomString::append(const char* str)
 	{
 		int customStringLen = len();
 		CustomString temp(customString);
-		delete customString;
+		delete[] customString;
 		customString = nullptr;
 		customString = new char[strLen + customStringLen + 1];
 		for (int i = 0; i < customStringLen; i++)
@@ -198,7 +198,7 @@ CustomString* CustomString::split(const char* str)
 		int index = temp.find(str);
 		if (index < 0)
 		{
-			delete temp.customString;
+			delete[] temp.customString;
 			temp.customString = nullptr;
 			count++;
 		}
@@ -223,7 +223,7 @@ CustomString* CustomString::split(const char* str)
 		if (index < 0)
 		{
 			result[count] = temp;
-			delete temp.customString;
+			delete[] temp.customString;
 			temp.customString = nullptr;
 		}
 		else
