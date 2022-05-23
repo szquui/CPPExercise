@@ -4,22 +4,22 @@
 class CustomString
 {
 public:
-	CustomString();
-	CustomString(const char* str);
-	CustomString(const CustomString& customStr);
+	CustomString() = default;
+	CustomString(const char* Str);
+	CustomString(const CustomString& CustomStr);
 	~CustomString();
 
-	CustomString& operator=(const CustomString& customStr);
-	bool operator==(const CustomString& customStr);
+	CustomString& operator=(const CustomString& CustomStr);
+	bool operator==(const CustomString& CustomStr);
 
 	int len() const;
 	void printCustomString();
-	CustomString& sub(int offset, int count);
-	void append(const char* str);
-	int find(const char* str);
-	CustomString* split(const char* str);
+	CustomString sub(int Offset, int Count);
+	void append(const char* Str);
+	int find(const char* Str);
+	CustomString* split(const char* Str);
 
 private:
-	char* customString = nullptr;
+	char* Data = nullptr;
 };
 

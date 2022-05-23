@@ -1,89 +1,82 @@
 #include "CustomString.h"
 #include <string>
 
-CustomString::CustomString()
+CustomString::CustomString(const char* Str)
 {
-	customString = new char[1];
-	*customString = '\0';
-}
-
-CustomString::CustomString(const char* str)
-{
-	if (str == nullptr)
+	if (Str && *Str)
 	{
-		customString = new char[1];
-		*customString = '\0';
-	}
-	else
-	{
-		int strLen = strlen(str) + 1;
-		customString = new char[strLen];
-		strcpy_s(customString, strLen, str);
+		int StrLen = strlen(Str) + 1;
+		Data = new char[StrLen];
+		strcpy_s(Data, StrLen, Str);
 	}
 }
 
-CustomString::CustomString(const CustomString& customStr)
+CustomString::CustomString(const CustomString& CustomStr)
 {
-	if (customStr.customString == nullptr)
+	if (CustomStr.Data == nullptr)
 	{
-		customString = nullptr;
+		if (Data != nullptr)
+		{
+			delete[] Data;
+			Data = nullptr;
+		}
 	}
 	else
 	{
-		int customStrLen = strlen(customStr.customString) + 1;
-		customString = new char[customStrLen];
-		strcpy_s(customString, customStrLen, customStr.customString);
+		int CustomStrLen = strlen(CustomStr.Data) + 1;
+		Data = new char[CustomStrLen];
+		strcpy_s(Data, CustomStrLen, CustomStr.Data);
 	}
 }
 
 CustomString::~CustomString()
 {
-	if (customString)
+	if (Data)
 	{
-		delete [] customString;
-		customString = nullptr;
+		delete[] Data;
+		Data = nullptr;
 	}
 }
 
-CustomString& CustomString::operator=(const CustomString& customStr)
+CustomString& CustomString::operator=(const CustomString& CustomStr)
 {
-	if (&customStr == this)
+	if (&CustomStr == this)
 	{
 		return *this;
 	}
 
-	if (customString != nullptr)
+	if (Data != nullptr)
 	{
-		delete[] customString;
+		delete[] Data;
 	}
 
-	int customStrLen = strlen(customStr.customString) + 1;
-	customString = new char[customStrLen];
-	strcpy_s(customString, customStrLen, customStr.customString);
+	int CustomStrLen = strlen(CustomStr.Data) + 1;
+	Data = new char[CustomStrLen];
+	strcpy_s(Data, CustomStrLen, CustomStr.Data);
 	return *this;
 }
 
-bool CustomString::operator==(const CustomString& customStr)
+bool CustomString::operator==(const CustomString& CustomStr)
 {
-	if (&customStr == this)
+	if (&CustomStr == this)
 	{
 		return true;
 	}
 
-	int customStrLen = customStr.len();
-	int customStringLen = len();
-	if (customStrLen != customStringLen)
+	int CustomStrLen = CustomStr.len();
+	int CustomStringLen = len();
+	if (CustomStrLen != CustomStringLen)
 	{
 		return false;
 	}
-	else if (customStrLen == 0)
+	else if (CustomStrLen == 0)
 	{
 		return true;
 	}
 
-	for(int i = 0; i < customStrLen; i++)
+	for(int i = 0; i < CustomStrLen; i++)
 	{
-		if (customStr.customString[i] != customString[i])
+		if (CustomStr.Data[i] != Data[i])
 		{
 			return false;
 		}
@@ -94,84 +87,88 @@ bool CustomString::operator==(const CustomString& customStr)
 
 int CustomString::len() const
 {
-	if (customString == nullptr)
+	if (Data == nullptr)
 	{
 		return 0;
 	}
-	return strlen(customString);
+	return strlen(Data);
 }
 
 void CustomString::printCustomString()
 {
-	std::cout << customString;
+	if (Data != nullptr)
+	{
+		std::cout << Data;
+	}
 }
 
-CustomString& CustomString::sub(int offset, int count)
+CustomString CustomString::sub(int Offset, int Count)
 {
-	CustomString* outCustomStr = new CustomString();
+	CustomString OutCustomStr = CustomString();
 	int length = len();
-	if (offset + count > length + 1)
+	if (Offset + Count > length)
 	{
-		std::cout << "Get CustomString sub failed, input offset and count more than customString length!\n";
-		return *outCustomStr;
+		std::cout << "Get CustomString sub failed, input Offset and Count more than Data length!\n";
+		return OutCustomStr;
 	}
 
-	outCustomStr->customString = new char[count + 1];
-	for (int i = 0;i < count; i++)
+	OutCustomStr.Data = new char[Count + 1];
+	for (int i = 0;i < Count; i++)
 	{
-		outCustomStr->customString[i] = customString[offset + i];
+		OutCustomStr.Data[i] = Data[Offset + i];
 	}
-	outCustomStr->customString[count] = '\0';
-	return *outCustomStr;
+	OutCustomStr.Data[Count] = '\0';
+	return OutCustomStr;
 }
 
-void CustomString::append(const char* str)
+void CustomString::append(const char* Str)
 {
-	if (str == nullptr)
+	if (Str == nullptr)
 	{
 		return;
 	}
 
-	int strLen = strlen(str) + 1;
-	if (customString == nullptr)
+	int StrLen = strlen(Str);
+	if (Data == nullptr)
 	{
-		customString = new char[strLen];
-		strcpy_s(customString, strLen, str);
+		Data = new char[StrLen + 1];
+		strcpy_s(Data, StrLen, Str);
 	}
 	else
 	{
-		int customStringLen = len();
-		CustomString temp(customString);
-		delete[] customString;
-		customString = nullptr;
-		customString = new char[strLen + customStringLen + 1];
-		for (int i = 0; i < customStringLen; i++)
+		int CustomStringLen = len();
+		CustomString Temp(Data);
+		delete[] Data;
+		Data = nullptr;
+		Data = new char[StrLen + CustomStringLen + 1];
+		for (int i = 0; i < CustomStringLen; i++)
 		{
-			customString[i] = temp.customString[i];
+			Data[i] = Temp.Data[i];
 		}
-		for (int i = customStringLen; i < strLen + customStringLen; i++)
+		for (int i = CustomStringLen; i < StrLen + CustomStringLen; i++)
 		{
-			customString[i] = str[i - customStringLen];
+			Data[i] = Str[i - CustomStringLen];
 		}
+		Data[StrLen + CustomStringLen] = '\0';
 	}
 }
 
-int CustomString::find(const char* str)
+int CustomString::find(const char* Str)
 {
-	if (str == nullptr || customString == nullptr)
+	if (Str == nullptr || Data == nullptr)
 	{
 		return -1;
 	}
 
-	int strLen = strlen(str);
+	int StrLen = strlen(Str);
 	for (int i = 0; i < len(); i++)
 	{
-		if (customString[i] == str[0])
+		if (Data[i] == Str[0])
 		{
 			bool bEqual = true;
-			for (int k = 1; k < strLen; k++)
+			for (int k = 1; k < StrLen; k++)
 			{
-				if (customString[i + k] != str[k])
+				if (Data[i + k] != Str[k])
 				{
 					bEqual = false;
 					break;
@@ -187,86 +184,91 @@ int CustomString::find(const char* str)
 	return -1;
 }
 
-CustomString* CustomString::split(const char* str)
+CustomString* CustomString::split(const char* Str)
 {
-	CustomString temp(customString);
-	int count = 0;
-	int strLen = strlen(str);
-	CustomString* result = nullptr;
-	while (temp.len() > 0)
-	{
-		int index = temp.find(str);
-		if (index < 0)
-		{
-			delete[] temp.customString;
-			temp.customString = nullptr;
-			count++;
-		}
-		else
-		{
-			temp = temp.sub(index + strLen, temp.len() - index - strLen);
-			count++;
-		}
-	}
-
-	if (count == 0)
+	if (Data == nullptr)
 	{
 		return nullptr;
 	}
 
-	result = new CustomString[count];
-	temp = *this;
-	count = 0;
-	while (temp.len() > 0)
+	CustomString Temp(Data);
+	int Count = 0;
+	int StrLen = strlen(Str);
+	CustomString* Result = nullptr;
+	while (Temp.len() > 0)
 	{
-		int index = temp.find(str);
-		if (index < 0)
+		int Index = Temp.find(Str);
+		if (Index < 0)
 		{
-			result[count] = temp;
-			delete[] temp.customString;
-			temp.customString = nullptr;
+			delete[] Temp.Data;
+			Temp.Data = nullptr;
+			Count++;
 		}
 		else
 		{
-			result[count] = temp.sub(0, index + strLen - 1);
-			temp = temp.sub(index + strLen, temp.len() - index - strLen);
-			count++;
+			Temp = Temp.sub(Index + StrLen, Temp.len() - Index - StrLen);
+			Count++;
 		}
 	}
-	return result;
+
+	if (Count == 0)
+	{
+		return nullptr;
+	}
+
+	Result = new CustomString[Count];
+	Temp = *this;
+	Count = 0;
+	while (Temp.len() > 0)
+	{
+		int Index = Temp.find(Str);
+		if (Index < 0)
+		{
+			Result[Count] = Temp;
+			delete[] Temp.Data;
+			Temp.Data = nullptr;
+		}
+		else
+		{
+			Result[Count] = Temp.sub(0, Index + StrLen - 1);
+			Temp = Temp.sub(Index + StrLen, Temp.len() - Index - StrLen);
+			Count++;
+		}
+	}
+	return Result;
 }
 
 
-int main()
-{
-	auto str1 = CustomString("test1");
-	str1.printCustomString();
-	std::cout << "\n";
-
-	auto str2 = CustomString("test1,test3");
-	str2.printCustomString();
-	std::cout << "\n";
-
-	str1 = "test3";
-	str1.printCustomString();
-	std::cout << "\n";
-
-	int len = str1.len();
-	std::cout << len <<"\n";
-
-	CustomString sub1 = str1.sub(1, 2);
-	sub1.printCustomString();
-	std::cout << "\n";
-
-	str1.append("append");
-	str1.printCustomString();
-	std::cout << "\n";
-
-	bool equal = str1 ==str2;
-	std::cout << equal <<"\n";
-
-	int index = str1.find("es");
-	std::cout << index << "\n";
-
-	CustomString* ret = str2.split(",");
-}
+//int main()
+//{
+//	auto Str1 = CustomString("test1");
+//	Str1.printCustomString();
+//	std::cout << "\n";
+//
+//	auto Str2 = CustomString("test1,test3");
+//	Str2.printCustomString();
+//	std::cout << "\n";
+//
+//	Str1 = "test3";
+//	Str1.printCustomString();
+//	std::cout << "\n";
+//
+//	int Len = Str1.len();
+//	std::cout << Len <<"\n";
+//
+//	CustomString Sub1 = Str1.sub(1, 2);
+//	Sub1.printCustomString();
+//	std::cout << "\n";
+//
+//	Str1.append("append");
+//	Str1.printCustomString();
+//	std::cout << "\n";
+//
+//	bool bEqual = Str1 ==Str2;
+//	std::cout << bEqual <<"\n";
+//
+//	int Index = Str1.find("es");
+//	std::cout << Index << "\n";
+//
+//	CustomString* Ret = Str2.split(",");
+//}
