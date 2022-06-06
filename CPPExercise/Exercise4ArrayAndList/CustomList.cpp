@@ -146,25 +146,25 @@ CustomListNode* CustomList::getEnd()
 	return find(end - 1);
 }
 
-int main()
-{
-	auto list1 = new CustomList();
-	auto node1 = list1->push(1);
-	list1->printCustomList();
-
-	auto node2 = list1->push(2);
-	list1->printCustomList();
-
-	auto node3 = list1->insert(node2, 3);
-	list1->printCustomList();
-
-	auto ret = list1->find(2);
-	std::cout << &*ret << "\n";
-
-	list1->remove(node2);
-	list1->printCustomList();
-
-	list1->popAll();
-	list1->printCustomList();
-	return 0;
-}
+//int main()
+//{
+//	auto list1 = new CustomList();
+//	auto node1 = list1->push(1);
+//	list1->printCustomList();
+//
+//	auto node2 = list1->push(2);
+//	list1->printCustomList();
+//
+//	auto node3 = list1->insert(node2, 3);
+//	list1->printCustomList();
+//
+//	auto ret = list1->find(2);
+//	std::cout << &*ret << "\n";
+//
+//	list1->remove(node2);
+//	list1->printCustomList();
+//
+//	list1->popAll();
+//	list1->printCustomList();
+//	return 0;
+//}
