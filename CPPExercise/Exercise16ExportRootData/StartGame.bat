@@ -1,0 +1,1 @@
+start G:\UE_5.0.3\UE_5.0\Engine\Binaries\Win64\UnrealEditor.exe %CD%\IronDesert.uproject -log=1.log -run=RootInfoExport path=/Game/Temp/IronDesert/uuiTest/uuiCPP/
